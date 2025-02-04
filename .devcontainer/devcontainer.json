@@ -1,0 +1,35 @@
+{
+    "name": "UV Python Development",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".",
+        "args": {
+            "PYTHON_ENV": "my_python_dev",
+            "AWS_ACCESS_KEY_ID": "${AWS_ACCESS_KEY_ID}",
+            "AWS_SECRET_ACCESS_KEY": "${AWS_SECRET_ACCESS_KEY}",
+            "AWS_REGION": "${AWS_REGION}"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/opt/my_python_dev/bin/python3",
+                "python.selectInterpreter": "/opt/my_python_dev/bin/python3"
+            },
+            "extensions": [
+                //Python
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "charliermarsh.ruff",
+                "ms-python.debugpy",
+                // Documents/Settings
+                "ms-toolsai.jupyter",
+                // Data
+                "mechatroner.rainbow-csv",
+                "ms-toolsai.datawrangler",
+                // Git
+                "mhutchie.git-graph"
+            ]
+        }
+    }
+}
