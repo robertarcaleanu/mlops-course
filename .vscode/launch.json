@@ -5,7 +5,7 @@
         "name": "Python: Current File",
         "type": "debugpy",
         "request": "launch",
-        "program": "${workspaceFolder}/first_etl/main.py",
+        "program": "${workspaceFolder}/online_inference_pipeline/lambda_function.py",
         "console": "integratedTerminal"
       }
     ]
