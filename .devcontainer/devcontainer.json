@@ -1,5 +1,5 @@
 {
-    "name": "UV Python Development",
+    "name": "Python Development",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".",
@@ -12,10 +12,6 @@
     },
     "customizations": {
         "vscode": {
-            "settings": {
-                "python.defaultInterpreterPath": "/opt/my_python_dev/bin/python3",
-                "python.selectInterpreter": "/opt/my_python_dev/bin/python3"
-            },
             "extensions": [
                 "ms-python.python",
                 "ms-python.vscode-pylance",
@@ -27,8 +23,5 @@
                 "mhutchie.git-graph"
             ]
         }
-    },
-    "mounts": [
-        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-    ]
+    }
 }

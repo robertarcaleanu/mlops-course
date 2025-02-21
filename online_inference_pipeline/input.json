@@ -1,3 +1,19 @@
 {
-    "name": "robert"
-}
+    "age": 35,
+    "job": "technician",
+    "marital": "married",
+    "education": "tertiary",
+    "default": "no",
+    "balance": 2000,
+    "housing": "yes",
+    "loan": "no",
+    "contact": "cellular",
+    "day": 15,
+    "month": "feb",
+    "duration": 120,
+    "campaign": 3,
+    "pdays": -1,
+    "previous": 2,
+    "poutcome": "success"
+  }
+  

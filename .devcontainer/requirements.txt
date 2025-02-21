@@ -11,3 +11,5 @@ polars
 debugpy
 pyarrow
 python-dotenv
+joblib==1.4.2
+scikit-learn==1.6.1

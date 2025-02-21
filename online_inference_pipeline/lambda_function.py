@@ -1,33 +1,39 @@
 import json
+import logging
 
-from model import MyModel
+from model import inference
+from transform import Transformer, preprocess
+from utils import load_model_from_s3
 
-# Load model once at startup to improve performance
-model = MyModel()
 
 def lambda_handler(event, context):
-    try:
-        print("Received event:", json.dumps(event))  # Debugging
+    # try:
+    logging.info(f"Event received {event}")
+    df = preprocess(event)
+    logging.info("Event Preprocessed")
+    df = Transformer().transform(df)
+    logging.info("Event Transformed")
 
-        # Extract and parse JSON body (for API Gateway Proxy Integration)
-        if "body" in event:
-            body = json.loads(event["body"])  # Convert string to dictionary
-        else:
-            body = event  # If it's direct invocation, use as is
+    model = load_model_from_s3(bucket_name='dataset-mlops-robert', model_key='model_dag.joblib')
+    logging.info("model loaded")
+    prediction = inference(df, model)
+    logging.info("Prediction completed")
 
-        # Ensure 'name' is present
-        if "name" not in body:
-            raise ValueError("Missing 'name' field in request")
+    return {
+        "statusCode": 200,
+        "body": json.dumps({"prediction": prediction})
+    }
+    # except Exception as e:
+    #     return {
+    #         "statusCode": 400,
+    #         "body": json.dumps({"error": str(e)})
+    #     }
 
-        # Pass parsed JSON to the model
-        prediction = model.predict(body)
 
-        return {
-            "statusCode": 200,
-            "body": json.dumps({"prediction": prediction})
-        }
-    except Exception as e:
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": str(e)})
-        }
+# Local testing code
+if __name__ == "__main__":
+    with open('online_inference_pipeline/input.json') as f:
+        event = json.load(f)  # Load the event from the file
+    context = {}  # You can leave the context empty for local testing
+    response = lambda_handler(event, context)
+    print("Response:", response)
