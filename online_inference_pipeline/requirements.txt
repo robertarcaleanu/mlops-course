@@ -1,0 +1,7 @@
+wheel==0.40.0
+pandas==2.0.3
+numpy==1.26.4
+pyarrow
+python-dotenv
+joblib==1.4.2
+scikit-learn==1.6.1

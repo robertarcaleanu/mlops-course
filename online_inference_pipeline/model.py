@@ -11,9 +11,13 @@ def inference(df, model):
         # Predict using the model
         result = model.predict(df)
         logging.info(f"Inference completed. Result shape: {result.shape if hasattr(result, 'shape') else 'N/A'}.")
+        if result[0] == 1:
+            return 'yes'
+        
+        elif result[0] == 0:
+            return 'no'
     
     except Exception as e:
         logging.error(f"Error during inference: {e}")
         raise
     
-    return result

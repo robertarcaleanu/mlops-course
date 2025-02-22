@@ -3,37 +3,37 @@ import logging
 
 from model import inference
 from transform import Transformer, preprocess
-from utils import load_model_from_s3
+from utils import load_object_from_s3
 
 
 def lambda_handler(event, context):
-    # try:
-    logging.info(f"Event received {event}")
-    df = preprocess(event)
-    logging.info("Event Preprocessed")
-    df = Transformer().transform(df)
-    logging.info("Event Transformed")
+    try:
+        logging.info(f"Event received {event}")
+        df = preprocess(event)
+        logging.info("Event Preprocessed")
+        df = Transformer().transform(df)
+        logging.info("Event Transformed")
 
-    model = load_model_from_s3(bucket_name='dataset-mlops-robert', model_key='model_dag.joblib')
-    logging.info("model loaded")
-    prediction = inference(df, model)
-    logging.info("Prediction completed")
+        model = load_object_from_s3(bucket_name='dataset-mlops-robert', model_key='model_dag.joblib')
+        logging.info("model loaded")
+        prediction = inference(df, model)
+        logging.info("Prediction completed")
 
-    return {
-        "statusCode": 200,
-        "body": json.dumps({"prediction": prediction})
-    }
-    # except Exception as e:
-    #     return {
-    #         "statusCode": 400,
-    #         "body": json.dumps({"error": str(e)})
-    #     }
+        return {
+            "statusCode": 200,
+            "body": json.dumps({"prediction": prediction})
+        }
+    except Exception as e:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({"error": str(e)})
+        }
 
 
 # Local testing code
-if __name__ == "__main__":
-    with open('online_inference_pipeline/input.json') as f:
-        event = json.load(f)  # Load the event from the file
-    context = {}  # You can leave the context empty for local testing
-    response = lambda_handler(event, context)
-    print("Response:", response)
+# if __name__ == "__main__":
+#     with open('online_inference_pipeline/input.json') as f:
+#         event = json.load(f)  # Load the event from the file
+#     context = {}  # You can leave the context empty for local testing
+#     response = lambda_handler(event, context)
+#     print("Response:", response)
