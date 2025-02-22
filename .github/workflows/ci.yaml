@@ -52,20 +52,13 @@ jobs:
       # Ensure we're on the correct branch and get the branch name
       - name: Checkout the correct branch if detached HEAD
         run: |
-          if [ "$(git symbolic-ref --short HEAD)" == "HEAD" ]; then
-            git checkout -b ${{ env.BRANCH_NAME }}  # Create and checkout the branch if detached
-          fi
           echo "Current branch is $BRANCH_NAME"
 
       # Commit and push changes if there are any
       - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add .
-          if ! git diff --cached --quiet; then
-            git commit -m "Format code with black"
-            git push origin HEAD  # Push the current commit to the current branch
-          else
-            echo "No changes to commit."
-          fi
+        uses: EndBug/add-and-commit@7.2.0
+        with:
+          author_name: github-actions
+          author_email: github-actions@github.com
+          message: Format code with black
+          add: .
