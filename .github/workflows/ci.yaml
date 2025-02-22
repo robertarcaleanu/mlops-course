@@ -29,6 +29,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history so we can push changes
+          ref: ${{ github.ref_name }} # Check out the current branch
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -48,10 +51,6 @@ jobs:
         run: |
           black online_inference_pipeline/
 
-      # Get current branch name
-      - name: Get current branch
-        run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-
       # Commit and push changes if there are any
       - name: Commit and push changes
         run: |
@@ -60,7 +59,7 @@ jobs:
           git add .
           if ! git diff --cached --quiet; then
             git commit -m "Format code with black"
-            git push origin ${{ env.BRANCH_NAME }}
+            git push origin ${{ github.ref_name }}
           else
             echo "No changes to commit."
           fi
