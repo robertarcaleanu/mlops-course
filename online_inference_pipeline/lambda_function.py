@@ -1,9 +1,9 @@
 import json
 import logging
 
-from model import inference
-from transform import Transformer, preprocess
-from utils import load_object_from_s3
+from online_inference_pipeline.model import inference
+from online_inference_pipeline.transform import Transformer, preprocess
+from online_inference_pipeline.utils import load_object_from_s3
 
 
 def lambda_handler(event, context):
