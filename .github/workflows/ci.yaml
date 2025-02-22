@@ -43,12 +43,20 @@ jobs:
         run: |
           black online_inference_pipeline/
 
-      # Check if any files were modified and commit them
+      # Get current branch name
+      - name: Get current branch
+        run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      # Commit and push changes if there are any
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add .
-          git diff --cached --quiet || git commit -m "Format code with black"
-          git push
+          if ! git diff --cached --quiet; then
+            git commit -m "Format code with black"
+            git push origin ${{ env.BRANCH_NAME }}
+          else
+            echo "No changes to commit."
+          fi
 
