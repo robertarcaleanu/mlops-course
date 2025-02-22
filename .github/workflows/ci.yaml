@@ -22,15 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Ensure the workflow has permission to push commits
-    
     env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref_name }} # Check out the current branch
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -50,6 +47,13 @@ jobs:
         run: |
           black online_inference_pipeline/
 
+      # Get current branch name
+      - name: Get current branch
+        run: |
+          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "Current branch is $BRANCH_NAME"
+
       # Commit and push changes if there are any
       - name: Commit and push changes
         run: |
@@ -58,7 +62,7 @@ jobs:
           git add .
           if ! git diff --cached --quiet; then
             git commit -m "Format code with black"
-            git push origin ${{ github.ref_name }}
+            git push origin ${{ env.BRANCH_NAME }}
           else
             echo "No changes to commit."
           fi
