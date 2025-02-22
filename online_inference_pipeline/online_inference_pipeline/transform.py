@@ -1,7 +1,8 @@
 import json
 
 import pandas as pd
-from utils import load_object_from_s3
+
+from online_inference_pipeline.utils import load_object_from_s3
 
 
 class Transformer:
