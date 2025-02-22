@@ -15,7 +15,6 @@ on:
   pull_request:
     branches:
       - main
-    
 
 jobs:
   build-and-test:
@@ -24,8 +23,7 @@ jobs:
       contents: write  # Ensure the workflow has permission to push commits
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}  # Dynamically set the branch name
 
     steps:
       - name: Checkout code
@@ -51,9 +49,12 @@ jobs:
         run: |
           black online_inference_pipeline/
 
-      # Get current branch name
-      - name: Get current branch
+      # Ensure we're on the correct branch and get the branch name
+      - name: Checkout the correct branch if detached HEAD
         run: |
+          if [ "$(git symbolic-ref --short HEAD)" == "HEAD" ]; then
+            git checkout -b ${{ env.BRANCH_NAME }}  # Create and checkout the branch if detached
+          fi
           echo "Current branch is $BRANCH_NAME"
 
       # Commit and push changes if there are any
@@ -64,8 +65,7 @@ jobs:
           git add .
           if ! git diff --cached --quiet; then
             git commit -m "Format code with black"
-            git push origin ${{ env.BRANCH_NAME }}
+            git push origin HEAD  # Push the current commit to the current branch
           else
             echo "No changes to commit."
           fi
-
