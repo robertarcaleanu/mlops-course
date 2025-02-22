@@ -4,7 +4,7 @@ import boto3
 import joblib
 
 
-def load_model_from_s3(bucket_name, model_key):
+def load_object_from_s3(bucket_name, model_key):
     s3_client = boto3.client('s3')
     
     # Fetch the model file from S3

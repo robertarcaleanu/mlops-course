@@ -1,6 +1,7 @@
 import json
 
 import pandas as pd
+from utils import load_object_from_s3
 
 
 class Transformer:
@@ -13,11 +14,19 @@ class Transformer:
             "loan",
             "default",
         ]
+        self.ONE_HOT_ENCODE_COLUMNS = [
+                    "marital",
+                    "job",
+                    "education",
+                    "poutcome",
+                    "contact"
+                    ]
 
     def transform(self, df: pd.DataFrame) -> pd.DataFrame:
         df = df.drop(self.DROP_COLUMNS, axis=1)
         df = self._map_binary_column_to_int(df)
         df = self._map_month_to_int(df)
+        df = self._one_hot_encoding(df)
 
         return df
 
@@ -33,6 +42,14 @@ class Transformer:
             'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
         }
         df["month"] = df["month"].map(month_mapping)
+
+        return df
+    
+    def _one_hot_encoding(self, df):
+        encoder = load_object_from_s3(bucket_name='dataset-mlops-robert', model_key='one_hot_encoder.joblib')
+        encoded_df = encoder.transform(df[self.ONE_HOT_ENCODE_COLUMNS])
+        df = df.drop(columns=self.ONE_HOT_ENCODE_COLUMNS)
+        df = pd.concat([df, encoded_df], axis=1)
 
         return df
 

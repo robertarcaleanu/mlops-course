@@ -1,7 +1,5 @@
 import logging
 
-import pandas as pd
-
 
 def inference(df, model):
     """
