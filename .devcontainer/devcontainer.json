@@ -10,6 +10,11 @@
             "AWS_REGION": "${AWS_REGION}"
         }
     },
+    "remoteEnv": {
+        "AWS_ACCESS_KEY_ID": "${env:AWS_ACCESS_KEY_ID}",
+        "AWS_SECRET_ACCESS_KEY": "${env:AWS_SECRET_ACCESS_KEY}",
+        "AWS_REGION": "${env:AWS_REGION}"
+    },
     "customizations": {
         "vscode": {
             "extensions": [
@@ -23,5 +28,8 @@
                 "mhutchie.git-graph"
             ]
         }
-    }
+    },
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ]
 }
