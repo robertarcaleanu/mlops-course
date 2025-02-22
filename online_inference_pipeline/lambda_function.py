@@ -14,20 +14,16 @@ def lambda_handler(event, context):
         df = Transformer().transform(df)
         logging.info("Event Transformed")
 
-        model = load_object_from_s3(bucket_name='dataset-mlops-robert', model_key='model_dag.joblib')
+        model = load_object_from_s3(
+            bucket_name="dataset-mlops-robert", model_key="model_dag.joblib"
+        )
         logging.info("model loaded")
         prediction = inference(df, model)
         logging.info("Prediction completed")
 
-        return {
-            "statusCode": 200,
-            "body": json.dumps({"prediction": prediction})
-        }
+        return {"statusCode": 200, "body": json.dumps({"prediction": prediction})}
     except Exception as e:
-        return {
-            "statusCode": 400,
-            "body": json.dumps({"error": str(e)})
-        }
+        return {"statusCode": 400, "body": json.dumps({"error": str(e)})}
 
 
 # Local testing code
