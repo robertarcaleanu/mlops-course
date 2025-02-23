@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         prediction = inference(df, model)
         logging.info("Prediction completed")
 
-        return {"statusCode": 200, "body": json.dumps({"prediction": prediction})}
+        return {"statusCode": 200, "body": json.dumps({"prediction": prediction}), "version": "@v1"}
     except Exception as e:
         return {"statusCode": 400, "body": json.dumps({"error": str(e)})}
 
