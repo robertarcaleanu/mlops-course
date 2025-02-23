@@ -42,19 +42,19 @@ jobs:
     # Step 5: Tag the image for ECR
     - name: Tag Docker image
       run: |
-        docker tag online_inference_lambda:latest ${secrets.AWS_ACCOUNT_ID}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:latest
+        docker tag online_inference_lambda:latest $AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:latest
 
     # Step 6: Push Docker Image to ECR
     - name: Push Docker image to ECR
       run: |
-        docker push ${secrets.AWS_ACCOUNT_ID}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:latest
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:latest
 
     # Step 7: Update Lambda function to use the new Docker image
     - name: Update Lambda function
       run: |
         aws lambda update-function-code \
           --function-name test-image \
-          --image-uri ${secrets.AWS_ACCOUNT_ID}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:latest
+          --image-uri $AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$ECR_REPOSITORY:latest
 
     # Step 8: Output the success message
     - name: Success
